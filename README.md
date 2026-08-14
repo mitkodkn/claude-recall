@@ -65,7 +65,7 @@ zsh (macOS default), and [Claude Code](https://claude.com/claude-code)
 with some history worth finding.
 
 ```sh
-git clone https://github.com/<you>/claude-recall && cd claude-recall
+git clone https://github.com/mitkodkn/claude-recall && cd claude-recall
 cargo build --release
 ln -s "$PWD/claude-recall.sh" ~/.local/bin/cs   # or anywhere on PATH
 ```
