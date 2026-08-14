@@ -1,15 +1,25 @@
 # claude-recall
 
-**Full-text search for your Claude Code session history — find any past conversation and resume it instantly.**
+**Full-text search for your Claude Code session history — because that
+genius fix from three weeks ago is in there *somewhere*.**
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Built with Rust](https://img.shields.io/badge/built%20with-Rust-orange.svg)](https://www.rust-lang.org)
 [![Powered by fzf](https://img.shields.io/badge/UI-fzf-green.svg)](https://github.com/junegunn/fzf)
 
-Claude Code's built-in `claude --resume` picker only shows session titles.
-`claude-recall` searches **everything you and Claude actually said** across
-every project, ranks results by relevance and recency, and drops you back
-into the conversation with one keystroke.
+You've had hundreds of conversations with Claude Code. Together you fixed
+that webhook bug, untangled that Redis queue, wrote that migration you're
+still a little proud of. Claude remembers none of it, and honestly,
+neither do you.
+
+The built-in `claude --resume` picker shows you a list of titles like a
+witness lineup. Was it *"fix the thing"*? *"handle tickets"*? *"asdf"*?
+Good luck.
+
+`claude-recall` searches **everything you and Claude actually said**,
+across every project, ranked by relevance and recency — and drops you
+back into the conversation with one keystroke. It's `⌘F` for your past
+selves.
 
 ```
 ┌──────────────────────────────────────────────────┐
@@ -25,28 +35,32 @@ into the conversation with one keystroke.
 └──────────────────────────────────────────────────┘
 ```
 
-## Features
+## What you get
 
-- 🔍 **Full-text search of Claude Code chat history** — your prompts *and*
-  Claude's replies, not just session titles
-- ⚡ **Fast**: Rust + SQLite FTS5. ~6ms per keystroke as you type, ~20ms
-  incremental re-index at launch, ~3s one-time full index of hundreds of
-  sessions (about 1GB of history)
-- 🎯 **Smart ranking**: BM25 relevance with a recency bonus — recent
-  conversations surface first; the last word matches as a prefix while
-  you're still typing
-- 👀 **Live preview** of matched snippets, highlighted in context
+- 🔍 **Real full-text search** of your Claude Code chat history — your
+  prompts *and* Claude's replies, not just the titles
+- ⚡ **Stupid fast**: Rust + SQLite FTS5. ~6ms per keystroke, ~20ms
+  re-index at launch, ~3s to index a gigabyte of history once. The
+  bottleneck is your typing.
+- 🎯 **Ranking that gets it**: BM25 relevance with a recency bonus, and
+  the last word matches as a prefix — results are right before you
+  finish typ
+- 👀 **Live preview** of the matched snippets, highlighted, so you can
+  tell your five "stripe webhook" sessions apart
 - ↩️ **One-keystroke resume**: `Enter` jumps to the session's original
-  project directory and runs `claude --resume`, with your preferred flags
-- 🔒 **100% local and private**: no network calls, no telemetry — the index
-  never leaves `~/.cache/claude-recall/`
-- 🤖 Optional `/sessions` slash command to search your history **from
-  inside Claude Code** and answer questions from past transcripts
+  project directory and runs `claude --resume` with your preferred flags
+- 🔒 **Local. Period.** No network calls, no telemetry, no "sign in to
+  continue". The index lives in `~/.cache/claude-recall/` and can be
+  deleted whenever you want
+- 🤖 A `/sessions` slash command so Claude itself can dig through your
+  shared past — *"what did we decide about the retry logic?"* — from
+  inside a running session
 
 ## Install
 
-Requires [fzf](https://github.com/junegunn/fzf), a Rust toolchain, zsh
-(macOS default), and [Claude Code](https://claude.com/claude-code).
+You'll need [fzf](https://github.com/junegunn/fzf), a Rust toolchain,
+zsh (macOS default), and [Claude Code](https://claude.com/claude-code)
+with some history worth finding.
 
 ```sh
 git clone https://github.com/<you>/claude-recall && cd claude-recall
@@ -54,81 +68,84 @@ cargo build --release
 ln -s "$PWD/claude-recall.sh" ~/.local/bin/ccr   # or anywhere on PATH
 ```
 
-Run `ccr`. The first run indexes your history in a few seconds; every run
-after that opens instantly with your most recent sessions listed.
+Run `ccr`. First run indexes everything in a few seconds. Every run after
+that opens instantly with your most recent sessions on top — so `ccr` ⏎
+is also the fastest "reopen what I was doing yesterday" there is.
 
-## Usage
+## Driving it
 
 | Key | Action |
 |---|---|
-| type | Full-text search across all sessions, ranked live |
-| `↑` `↓` | Move through results (preview follows) |
-| `Enter` | Resume the session in place, in its original project dir |
-| `Ctrl-F` | Resume with custom `claude` flags for this run |
-| `Esc` | Quit |
-
-An empty query lists your most recent Claude Code sessions — so `ccr` ⏎ ⏎
-is also the fastest way to reopen what you worked on last.
+| type | Full-text search across all sessions, live |
+| `↑` `↓` | Move through results, preview follows |
+| `Enter` | Resume the session, right there in your terminal |
+| `Ctrl-F` | Resume with custom `claude` flags, this once |
+| `Esc` | Return to the present |
 
 ## Configuration
 
-`claude-recall` adds no claude flags by default. To always resume with
-certain flags, put them on one line in `~/.config/claude-recall/flags`:
+By default, resume adds no flags. If you always want some (you know the
+one), put them on a line in `~/.config/claude-recall/flags`:
 
 ```sh
 mkdir -p ~/.config/claude-recall
 echo "--dangerously-skip-permissions" > ~/.config/claude-recall/flags
 ```
 
-(or set `$CLAUDE_RECALL_FLAGS`; the file wins). Active flags are shown in
-the UI header. `$CLAUDE_RECALL_DB` overrides the index location.
+(or set `$CLAUDE_RECALL_FLAGS`; the file wins). The active flags are shown
+in the UI header so `Enter` never surprises you. `$CLAUDE_RECALL_DB`
+overrides where the index lives.
 
-## Search history from inside Claude Code
+## Let Claude search its own past
 
 Copy `extras/sessions.md` to `~/.claude/commands/sessions.md` and put the
-binary on PATH (`cargo install --path .`). Then, in any running session:
+binary on PATH (`cargo install --path .`). Then, mid-session:
 
 ```
 /sessions that redis queue bug we fixed
 ```
 
-Claude searches your past sessions, shows matched snippets, answers
-questions from the matched transcript, or prints the exact resume command.
+Claude searches your history, shows the matches, and either answers from
+the old transcript or hands you the exact resume command. Yes, it's
+Claude reading Claude's diary. It's fine. Everyone's fine.
 
-**Bonus (macOS + Ghostty)**: add the keybind from `extras/ghostty-config`
-for a system-wide `⌘⇧S` drop-down terminal — type `ccr` there for a
-Spotlight-like session finder from anywhere.
+**Bonus (macOS + Ghostty)**: the keybind in `extras/ghostty-config` gives
+you a system-wide `⌘⇧S` drop-down terminal — type `ccr` there and it's
+basically Spotlight for your Claude sessions.
 
 ## FAQ
 
 **Where does Claude Code store session history?**
-In `~/.claude/projects/<project>/<session-id>.jsonl` — one JSONL file per
-session containing every message. `claude-recall` indexes user and
-assistant text from these files, skipping tool output and internal noise.
+`~/.claude/projects/<project>/<session-id>.jsonl` — one JSONL file per
+session, every message included. `claude-recall` indexes the user and
+assistant text and skips the tool spam, subagent chatter, and other
+robot noises.
 
 **How is this different from `claude --resume`?**
-The built-in picker lists sessions for the current project by title only.
-`claude-recall` searches the full conversation content across **all**
-projects, and still hands off to `claude --resume` for the actual resume.
+The built-in picker lists the current project's sessions by title.
+`claude-recall` searches full conversation content across **all**
+projects — then uses `claude --resume` for the actual resume. Friends,
+not rivals.
 
 **Does my conversation data go anywhere?**
-No. Indexing and search are fully offline; the SQLite index stays on your
-machine. Deleting `~/.cache/claude-recall/` removes it completely.
+No. Indexing and search are fully offline. Delete
+`~/.cache/claude-recall/` and it's like nothing ever happened.
 
-**Does it slow Claude Code down?**
-No — it's a separate read-only tool. It never touches or modifies your
-session files.
+**Will it slow Claude Code down?**
+No — it's a separate, read-only tool. It never modifies your session
+files. It just reads. Like a very fast librarian.
 
-**Linux support?**
-The Rust core is portable; the wrapper script needs zsh and was built on
-macOS. PRs welcome.
+**Linux?**
+The Rust core is portable; the wrapper wants zsh and grew up on macOS.
+PRs welcome.
 
 ## How it works
 
-One Rust binary (`claude-recall`) with three subcommands: `index`
-(incremental SQLite FTS5 indexing by file mtime/size), `list` (ranked TSV
-for fzf), and `preview` (highlighted snippets). `claude-recall.sh` wires
-them into fzf and handles the resume. ~400 lines total.
+One Rust binary (`claude-recall`) with three subcommands — `index`
+(incremental SQLite FTS5, keyed on file mtime/size), `list` (ranked TSV
+for fzf), `preview` (highlighted snippets) — and one zsh script that
+wires them into fzf and handles the resume. ~400 lines total. No
+framework survived contact with this project.
 
 ## License
 
