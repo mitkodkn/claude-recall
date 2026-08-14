@@ -1,6 +1,6 @@
 # claude-recall
 
-![claude-recall — a crab librarian searching an archive of terminal drawers](assets/banner.png)
+![claude-recall — full-text search for Claude Code session history: a crab librarian searching an archive of terminal drawers](assets/banner.png)
 
 **Full-text search for your Claude Code session history — because that
 genius fix from three weeks ago is in there *somewhere*.**
