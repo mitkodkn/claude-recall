@@ -60,14 +60,24 @@ selves.
 
 ## Install
 
-You'll need [fzf](https://github.com/junegunn/fzf), a Rust toolchain,
-zsh (macOS default), and [Claude Code](https://claude.com/claude-code)
-with some history worth finding.
+You'll need [fzf](https://github.com/junegunn/fzf), zsh (macOS default),
+and [Claude Code](https://claude.com/claude-code) with some history
+worth finding.
+
+**Prebuilt binary** (no Rust needed) — pick your platform:
+
+```sh
+# Apple Silicon: aarch64-apple-darwin · Intel Mac: x86_64-apple-darwin · Linux: x86_64-unknown-linux-gnu
+curl -sL https://github.com/mitkodkn/claude-recall/releases/latest/download/claude-recall-aarch64-apple-darwin.tar.gz | tar xz
+ln -s "$PWD/claude-recall/claude-recall.sh" ~/.local/bin/cs   # or anywhere on PATH
+```
+
+**From source** (needs a Rust toolchain):
 
 ```sh
 git clone https://github.com/mitkodkn/claude-recall && cd claude-recall
 cargo build --release
-ln -s "$PWD/claude-recall.sh" ~/.local/bin/cs   # or anywhere on PATH
+ln -s "$PWD/claude-recall.sh" ~/.local/bin/cs
 ```
 
 The command is `cs` — short for **c**laude **s**earch. First run indexes

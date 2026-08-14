@@ -4,7 +4,8 @@
 set -u
 DIR="${0:A:h}"
 export PATH="$HOME/.local/bin:$HOME/.cargo/bin:/opt/homebrew/bin:/usr/local/bin:$PATH"
-BIN="$DIR/target/release/claude-recall"
+BIN="$DIR/claude-recall"                          # release tarball layout
+[[ -x "$BIN" ]] || BIN="$DIR/target/release/claude-recall"   # built from source
 if [[ ! -x "$BIN" ]]; then
   BIN="$(command -v claude-recall)" || {
     print "claude-recall not found — build it with:"
