@@ -1,5 +1,7 @@
 # claude-recall
 
+![claude-recall — a crab librarian searching an archive of terminal drawers](assets/banner.png)
+
 **Full-text search for your Claude Code session history — because that
 genius fix from three weeks ago is in there *somewhere*.**
 
@@ -65,12 +67,13 @@ with some history worth finding.
 ```sh
 git clone https://github.com/<you>/claude-recall && cd claude-recall
 cargo build --release
-ln -s "$PWD/claude-recall.sh" ~/.local/bin/ccr   # or anywhere on PATH
+ln -s "$PWD/claude-recall.sh" ~/.local/bin/cs   # or anywhere on PATH
 ```
 
-Run `ccr`. First run indexes everything in a few seconds. Every run after
-that opens instantly with your most recent sessions on top — so `ccr` ⏎
-is also the fastest "reopen what I was doing yesterday" there is.
+The command is `cs` — short for **c**laude **s**earch. First run indexes
+everything in a few seconds. Every run after that opens instantly with
+your most recent sessions on top — so `cs` ⏎ is also the fastest
+"reopen what I was doing yesterday" there is.
 
 ## Driving it
 
@@ -110,7 +113,7 @@ the old transcript or hands you the exact resume command. Yes, it's
 Claude reading Claude's diary. It's fine. Everyone's fine.
 
 **Bonus (macOS + Ghostty)**: the keybind in `extras/ghostty-config` gives
-you a system-wide `⌘⇧S` drop-down terminal — type `ccr` there and it's
+you a system-wide `⌘⇧S` drop-down terminal — type `cs` there and it's
 basically Spotlight for your Claude sessions.
 
 ## FAQ
