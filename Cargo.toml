@@ -1,8 +1,8 @@
 [package]
-name = "claude-sessions-core"
+name = "claude-recall"
 version = "0.1.0"
 edition = "2021"
-description = "Full-text search over Claude Code session history"
+description = "Full-text search and instant resume for Claude Code session history"
 license = "MIT"
 
 [dependencies]

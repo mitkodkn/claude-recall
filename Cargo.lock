@@ -71,7 +71,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "claude-sessions-core"
+name = "claude-recall"
 version = "0.1.0"
 dependencies = [
  "chrono",

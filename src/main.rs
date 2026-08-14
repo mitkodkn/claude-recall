@@ -1,7 +1,7 @@
 // Fast core for the Claude Code session finder.
-//   claude-sessions-core index            incrementally (re)index sessions
-//   claude-sessions-core list [query]     TSV rows for fzf
-//   claude-sessions-core preview SID [q]  human-readable session preview
+//   claude-recall index            incrementally (re)index sessions
+//   claude-recall list [query]     TSV rows for fzf
+//   claude-recall preview SID [q]  human-readable session preview
 
 use chrono::{DateTime, Utc};
 use rusqlite::Connection;
@@ -42,10 +42,10 @@ fn home() -> PathBuf {
 }
 
 fn db_path() -> PathBuf {
-    if let Ok(p) = std::env::var("CLAUDE_SESSIONS_DB") {
+    if let Ok(p) = std::env::var("CLAUDE_RECALL_DB") {
         return PathBuf::from(p);
     }
-    home().join(".cache/claude-sessions/index.db")
+    home().join(".cache/claude-recall/index.db")
 }
 
 fn open_db() -> Connection {
@@ -501,6 +501,6 @@ fn main() {
                 cmd_preview(sid, args.get(3).map(String::as_str).unwrap_or(""));
             }
         }
-        _ => eprintln!("usage: claude-sessions-core index|list [q]|preview SID [q]"),
+        _ => eprintln!("usage: claude-recall index|list [q]|preview SID [q]"),
     }
 }

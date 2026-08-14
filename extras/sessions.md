@@ -8,8 +8,8 @@ Steps:
 
 1. Refresh the index and search (both are near-instant):
    ```
-   claude-sessions-core index
-   claude-sessions-core list "$ARGUMENTS"
+   claude-recall index
+   claude-recall list "$ARGUMENTS"
    ```
    Output columns (tab-separated): session_id, cwd, age, project, title.
    Strip ANSI codes when reading. Results are ranked best-match-first
@@ -18,7 +18,7 @@ Steps:
 2. Show the top ~5 matches as a readable list: age, project, title.
    For the top 2–3, include matched snippets via:
    ```
-   claude-sessions-core preview <session_id> "$ARGUMENTS"
+   claude-recall preview <session_id> "$ARGUMENTS"
    ```
 
 3. Then, depending on what I asked for:

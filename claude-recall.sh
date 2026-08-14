@@ -4,19 +4,19 @@
 set -u
 DIR="${0:A:h}"
 export PATH="$HOME/.local/bin:$HOME/.cargo/bin:/opt/homebrew/bin:/usr/local/bin:$PATH"
-BIN="$DIR/target/release/claude-sessions-core"
+BIN="$DIR/target/release/claude-recall"
 if [[ ! -x "$BIN" ]]; then
-  BIN="$(command -v claude-sessions-core)" || {
-    print "claude-sessions-core not found — build it with:"
+  BIN="$(command -v claude-recall)" || {
+    print "claude-recall not found — build it with:"
     print "  cargo build --release   (in the repo)  or  cargo install --path ."
     exit 1
   }
 fi
 
 # Default claude flags for resume come from the user's setup, not the tool:
-# ~/.config/claude-sessions/flags (one line), or $CLAUDE_SESSIONS_FLAGS.
-flags="${CLAUDE_SESSIONS_FLAGS:-}"
-conf="$HOME/.config/claude-sessions/flags"
+# ~/.config/claude-recall/flags (one line), or $CLAUDE_RECALL_FLAGS.
+flags="${CLAUDE_RECALL_FLAGS:-}"
+conf="$HOME/.config/claude-recall/flags"
 [[ -f "$conf" ]] && flags="$(head -1 "$conf")"
 
 header='⏎ resume    ⌃F custom flags    esc quit'

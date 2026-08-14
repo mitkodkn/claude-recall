@@ -1,4 +1,4 @@
-# System-wide dropdown terminal (Quake-style) — type `cs` in it to
+# System-wide dropdown terminal (Quake-style) — type `ccr` in it to
 # search Claude Code sessions. Requires macOS accessibility permission
 # (Ghostty prompts once). Add to ~/.config/ghostty/config:
 keybind = global:cmd+shift+s=toggle_quick_terminal
