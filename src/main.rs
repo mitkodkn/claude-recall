@@ -138,9 +138,15 @@ fn index_file(con: &Connection, path: &str) -> usize {
     let Ok(fh) = std::fs::File::open(path) else { return 0 };
     for line in BufReader::new(fh).lines().map_while(Result::ok) {
         let Ok(rec) = serde_json::from_str::<Value>(&line) else { continue };
-        if let Some(c) = rec.get("cwd").and_then(Value::as_str) {
-            if !c.is_empty() {
-                cwd = c.to_string();
+        // Every record carries the cwd *at that moment*, which follows any
+        // `cd` the session ran. Only the first one is the directory the
+        // session was launched in — and the only one `claude --resume`
+        // will find it from.
+        if cwd.is_empty() {
+            if let Some(c) = rec.get("cwd").and_then(Value::as_str) {
+                if !c.is_empty() {
+                    cwd = c.to_string();
+                }
             }
         }
         let rtype = rec.get("type").and_then(Value::as_str).unwrap_or("");
