@@ -1,6 +1,6 @@
 [package]
 name = "claude-recall"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 description = "Full-text search and instant resume for Claude Code session history"
 license = "MIT"

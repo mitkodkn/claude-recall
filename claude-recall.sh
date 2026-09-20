@@ -54,5 +54,11 @@ if [[ "$key" == "ctrl-f" ]]; then
   [[ -n "$custom" ]] && flags="$custom"
 fi
 
-cd "$cwd" 2>/dev/null || cd "$HOME"
+if cd "$cwd" 2>/dev/null; then
+  # Hand the project dir back to the optional `cs` shell function
+  # (extras/cs.zsh), so the calling shell lands here too on exit.
+  [[ -n "${CLAUDE_RECALL_CD_FILE:-}" ]] && print -r -- "$PWD" > "$CLAUDE_RECALL_CD_FILE"
+else
+  cd "$HOME"
+fi
 claude --resume "$sid" ${=flags}

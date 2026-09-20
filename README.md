@@ -109,6 +109,20 @@ echo "--dangerously-skip-permissions" > ~/.config/claude-recall/flags
 in the UI header so `Enter` never surprises you. `$CLAUDE_RECALL_DB`
 overrides where the index lives.
 
+### Stay in the project directory
+
+`Enter` resumes the session in its original project directory — but `cs`
+is a child process, and a child can't move its parent, so quitting Claude
+drops your shell back where it started. Source the wrapper to make the
+move stick:
+
+```sh
+echo 'source /path/to/claude-recall/extras/cs.zsh' >> ~/.zshrc
+```
+
+Now you quit Claude and you're standing in the project you were just
+working on. `Esc` still leaves you exactly where you were.
+
 ## Let Claude search its own past
 
 Copy `extras/sessions.md` to `~/.claude/commands/sessions.md` and put the
